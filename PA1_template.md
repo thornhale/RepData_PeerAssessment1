@@ -56,7 +56,33 @@ To visualize the distribution of total steps per day, the following command is e
 
 ## What is the average daily activity pattern?
 
+I need to first create a new dataframe with interval step averages. NA values will be removed for simplicity in this step to get a first idea. We will look at numbers of NA values further below. Originally, I wanted to use dplyr but I can't seem to figure out how to get that to work. So I am falling back to more simple data manipulations.
 
+### Processing Code
+
+```r
+intervalId <- rep(1:288,61)
+dateId <- rep(1:61, each = 288)
+activityData2 <-cbind(intervalId, dateId, steps=activityData[,1])
+intervalmeans <- c()
+for (i in 1:288){
+    value2 <- mean(activityData2[activityData2[,1] == i,3], na.rm=TRUE)
+    intervalmeans <- c(intervalmeans,value2)
+}
+activityData3<-cbind(1:288, intervalMeans = intervalmeans)
+```
+
+### Analytic Code
+
+
+```r
+qplot(activityData3[,1], activityData3[,2], geom=c('line'),
+    main = "Average Steps Taken,\n Intervals 1-288",
+    xlab = "Interval ID", 
+    ylab = "Average number of steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 ## Imputing missing values
 
@@ -64,8 +90,17 @@ Let's find out how many missing values there are:
 
 ```r
 missingValues <- activityData[is.na(activityData$steps),]
-numberOfMissingValues <- length(missingValues)
+numberOfMissingValues <- length(missingValues[,1])
+numberOfTotalEntries <- length(activityData[,1])
+numberOfMissingValues
 ```
-There are 3
+
+```
+## [1] 2304
+```
+
+There are 2304 missing values out of `r numberOfTotalEntries That's a lot of values to simply ignore. I will fill in the missing values with the median value for that interval.
+
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
