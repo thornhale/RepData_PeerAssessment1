@@ -84,6 +84,39 @@ qplot(activityData3[,1], activityData3[,2], geom=c('line'),
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
+To find out what interval contains the largest average numer of steps, find the maximum value. Then find the interval this value belongs to.
+
+
+```r
+maxAverageSteps <- max(activityData3[,2])
+intervalWithMax <- activityData3[activityData3[,2] == maxAverageSteps]
+intervalWithMax
+```
+
+```
+## [1] 104.0000 206.1698
+```
+
+
+The interval with the largest average steps is:
+
+```r
+intervalWithMax[1]
+```
+
+```
+## [1] 104
+```
+The average number of steps taken during that time is:
+
+```r
+intervalWithMax[2]
+```
+
+```
+## [1] 206.1698
+```
+
 ## Imputing missing values
 
 Let's find out how many missing values there are: 
